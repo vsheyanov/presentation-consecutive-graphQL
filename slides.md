@@ -1,6 +1,6 @@
 ---
 # try also 'default' to start simple
-theme: seriph
+theme: bricks
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: https://source.unsplash.com/collection/94734566/1920x1080
@@ -51,6 +51,523 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 ---
 transition: fade-out
+---
+# How it all started?
+
+Why did I do that?
+
+---
+
+# Required knowledge
+
+Complexity
+
+<div v-click>
+
+- Javascript / React - easy/medium
+- React Native - easy/medium
+- GraphQL - easy/medium -> hard
+
+</div>
+
+<div v-click>
+
+- WAT - GOD LEVEL
+<img src="/wat.png" style="height: 230px"/>
+
+</div>
+
+---
+
+# Why on Earth did we do it?
+
+What do you need to know
+
+<v-clicks>
+
+- Legacy code
+- Mature product
+- Staff turn-over
+
+</v-clicks>
+
+<!-- 
+## Legacy code
+
+It has a bad connotation, but it is not necessarily awful or not working. It may still do the job, it's just was written long time ago and now nobody dares to touch it
+
+## Mature product
+
+Is the product that is stable in a way, was in development for years, used in production, generates revenue. From the business point of view it "works" and what works must not be broken.
+
+## Staff turn-over
+
+People come and go, they find new jobs, move to another countries take sabbaticals. This means that anyone can end up in a situation when there is not a single person, who can answer questions that start with "Why".
+-->
+
+---
+
+# Our stack
+
+<img src="/overview-app.png"/>
+
+---
+
+# Typical request example 
+
+<div grid="~ cols-5 gap-6">
+  <div col-span-2>
+  
+  ```ts
+    updateOrderChecklist({
+      door: 'checked'
+    });
+    ...
+    updateOrderChecklist({
+      boiler: 'works'
+    });
+    ...
+    updateOrderChecklist({
+      boiler_CO2: 33.3
+    });
+  ```
+  
+  </div>
+
+  <img col-span-3 src="/overview-app.png"/>
+</div>
+
+---
+layout: image-right
+image: https://source.unsplash.com/collection/94734566/1920x1080
+---
+
+# Salesforce limits imposed on the frontend team
+
+<v-clicks>
+
+- number of long-running requests
+- number of requests
+- DB locks
+
+</v-clicks>
+
+---
+
+# Example
+
+<style>
+  .img {
+    height: 70%;
+    margin-top: 30px;
+  }
+</style>
+
+<img class="img mx-auto" src="/update-parallel.png"/>
+
+<!-- 
+# Problems in numbers
+* Update #1 takes 500ms - 3seconds to complete
+* User clicks fast, as a result we have 2-3 overlapping requests
+* On the Frontend we usually don't care, it's not our problem, Backend must handle it.
+* In our case it was not an option. FE teams was told that this problem CANNOT be fixed on the BE.
+-->
+
+---
+
+# Solution direction
+
+<div>Updates must be done in sequence</div>
+
+<v-click>
+
+<div>From Salesforce this will reduce all 3 limits:
+
+- number of API calls
+</div>
+
+</v-click>
+
+<v-clicks>
+
+- reduced SF load -> fewer long lasting requests
+- Fewer DB locks (since we’ll have fewer requests in parallel).
+
+</v-clicks>
+
+
+
+
+<!-- 
+If we cannot run requests in parallel, we have to run them consecutively. One after another, yes.
+
+-  since 1 user will be adding only 1 request at a time
+- 
+
+-->
+
+---
+
+# Success criteria
+## Customer always comes first
+
+* From customer point of view nothing changes, they should still be able work with app without noticing ANY delays
+* Actual changes (mutations) are executed in sequence
+
+---
+
+# GraphQL links
+
+<img src="/graphql-link.png"/>
+
+GraphQL offers a way to customize Apollo Client's data flow with something called Links:
+* logging link
+* error handler link
+* execution time link
+
+The key here is **Link chain** TODO (Add Dineris saying "I want to break the chain" crossed).
+
+---
+
+# What is a link?
+
+```ts
+import { ApolloLink } from '@apollo/client';
+
+const timeStartLink = new ApolloLink((operation, forward) => {
+  operation.setContext({ start: new Date() });
+  return forward(operation);
+});
+```
+
+The forward function's return type is an Observable provided by the **zen-observable** library. See the 
+zen-observable documentation for details.
+
+
+---
+
+# How it should be
+
+<style>
+  .row {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+  .img {
+    height: 70%;
+    margin-top: 30px;
+  }
+  .second {
+    margin-left: 30px;
+  }
+  .third {
+    margin-left: 80px;
+  }
+</style>
+
+<img class="img mx-auto" src="/consecutive.png"/>
+
+---
+
+# GraphQL mutation
+
+<div grid="~ cols-2 gap-5">
+
+```ts
+// Mutation definition
+const UPDATE_COMMENT = gql`
+  mutation UpdateComment($commentId: ID!, 
+    $commentContent: String!) {
+    updateComment(commentId: $commentId, 
+      content: $commentContent) {
+      id
+      __typename
+      content
+    }
+  }
+`;
+```
+
+```ts
+// Component definition
+function CommentPageWithData() {
+  const [mutate] = useMutation(UPDATE_COMMENT);
+  return (
+    <Comment
+      updateComment={({ commentId, commentContent }) =>
+        mutate({
+          variables: { commentId, commentContent },
+          optimisticResponse: {
+            updateComment: {
+              id: commentId,
+              __typename: "Comment",
+              content: commentContent
+            }
+          }
+        })
+      }
+    />
+  );
+}
+```
+
+</div>
+
+---
+
+# OrderChecklist updates
+
+```ts
+updateOrderChecklist({
+  variables: {
+    id: ‘order_1’,
+    door: 'checked'
+  },
+  optimistic: {
+    id: ‘order_1’,
+    door: 'checked',
+    price: 50
+  },
+});
+```
+
+<!-- At this point whenever a mutation is performed, user will always see a result of an optimistic response first and in 99.9% cases optimistic response will match the actual response.
+But requests are still executed in parallel. Let’s fix it. -->
+
+---
+layout: center
+theme: bricks
+image: rabbit.png
+---
+
+# Let's create a link!
+
+---
+
+# Empty link
+
+```ts
+export const queuedLink = new ApolloLink((operation, forward) => {
+  return forward(operation);
+});
+```
+
+<img class="pt-4" src="/link-regular.png"/>
+
+---
+
+# Create a queue
+
+```ts {1,4|all}
+const queue = [];
+
+export const queuedLink = new ApolloLink((operation, forward) => {
+  queue.push(operation);
+
+  return forward(operation);
+});
+```
+
+<img class="pt-4" src="/link-new-queue.png"/>
+
+---
+
+# Return Observable, save item in queue
+
+<div v-click-hide>
+
+```ts {1,4-20|all}
+const queue = [];
+
+export const queuedLink = new ApolloLink((operation, forward) => {
+  
+  return new Observable((observer) => {
+    queue.push({
+      operation,
+      forward,
+      observer,
+    });
+
+    return () => {};
+  });
+});
+```
+
+</div>
+
+<img v-after class="pt-4 absolute top-40 w-4\/5" src="/link-return-observer.png"/>
+
+---
+
+# Execute queue
+
+```ts {3-5,16|all}
+const queue = [];
+
+const executeQueue = async () => {
+  // execute an operation and return the result
+}
+
+export const queuedLink = new ApolloLink((operation, forward) => {
+
+  return new Observable((observer) => {
+    queue.push({
+      operation,
+      forward,
+      observer,
+    });
+
+    executeQueue();
+
+    return () => {};
+  });
+});
+```
+
+---
+
+# Execute queue
+
+```ts {3,6-17|all}
+const queue = [];
+
+let queueRuning = false;
+
+const executeQueue = async () => {
+  if (queue.length === 0 || queueRuning) {
+    return;
+  }
+
+  queueRuning = true;
+
+  const nextItem = queue.shift();
+
+  // do some async work
+
+  queueRuning = false;
+  executeQueue();
+ }
+
+export const queuedLink = new ApolloLink((operation, forward) => {
+  .......
+```
+
+---
+
+<style>
+  #code-block pre * {
+    font-size: 0.9em !important;
+  }
+</style>
+
+# Execute queue
+
+<div id="code-block">
+
+```ts {3-18|3|5|6|7-10|11-13|14-17|all}
+const executeQueue = async () => {
+  ...
+  const { forward, operation, observer } = queue.shift();
+
+  forward(operation)
+    .subscribe(
+      async (result) => {
+        observer.next(result);
+        observer.complete();
+      },
+      (error) => {
+        observer.error(error);
+      },
+      () => {
+        queueRuning = false;
+        executeQueue();
+      },
+    );
+}
+
+export const queuedLink = new ApolloLink((operation, forward) => {
+  ...
+```
+
+</div>
+
+
+
+---
+
+# Summary
+
+### What did we achieve?
+
+1. it works
+2. we have something in our lives to be shamed about
+
+### Important considerations
+- All mutations that go to consecutive queue must have an optimistic response
+  - To make sure a user doesn’t see any difference
+- Optimistic response should be correct
+  - Otherwise a user will see UI changing after the actual response is received
+
+---
+
+# Cherry on top
+### Let's make it work in Offline!
+
+```ts {4-12,16}
+const queue = [];
+
+let queueRuning = false;
+let isOffline = false;
+
+NetInfo.addEventListener(state => {
+  isOffline = state.isInternetReachable !== true
+  
+  if (!isOffline) {
+    executeQueue();
+  }
+});
+
+const executeQueue = async () => {
+  if (queue.length === 0 || queueRuning 
+    || isOffline) {
+    return;
+  }
+```
+
+---
+
+# Further thoughts on IDs
+### A rabbit starts it's journey
+
+- IDs. If you create a new object and then edit it before you received a response from server, 
+you don’t know what Object.ID you want to update/delete.
+  - Can be fixed by having a dictionary with key-value pairs where the key is temp ID and 
+  value is an actual ID after a response is receive. 
+    - For every mutation you’ll need to go through all variables in the payload and replace 
+    temp value with actual one if found
+      - Automated iteration in every field of the payload (may be intensive) or custom logic for 
+      some of the mutations (needs to be maintained separately) - your choice.
+
+<!-- ---
+layout: center    -->
+---
+
+<style>
+  .imgg {
+    height: 300px;
+  }
+</style>
+
+# Don't fall into it
+
+<div grid="~ cols-4">
+  <span grid="~ col-span-1"></span>
+  <img grid="~ col-span-2" src="/rabbit.jpeg"/>
+  <span grid="~ col-span-1"></span>
+</div>
+
+
 ---
 
 # What is Slidev?
