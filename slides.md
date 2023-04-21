@@ -47,7 +47,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 # Plan
 - About me
-- Prerequisites (what tech do you need to know?)
+- Technologies of the talk
 - Organisation stack & requests example
 - Problem definition, solution direction and acceptance criteria
 - GraphQL & Apollo
@@ -136,29 +136,23 @@ People come and go, they find new jobs, move to another countries take sabbatica
 layout: section
 ---
 
-# Prerequisites 
+# Technologies of the talk 
 
 ---
 
-# Required knowledge
-
-Complexity
+# Technologies
 
 <v-clicks>
 
-- Javascript / React - easy/medium
-- React Native - easy/medium
-- GraphQL - easy/medium 
-  - -> hard
+<img src="/logo_js.png" class="absolute top-35 left-20 w-1/5"/>
+<img src="/logo_ts.png" class="absolute top-35 left-100 w-1/7 "/>
+<img src="/logo_rn.png" class="absolute top-30 left-180 w-1/6"/>
+<img src="/logo_apollo.webp" class="absolute top-85 left-20 w-1/5"/>
+<img src="/logo_appsync.png" class="absolute top-115 left-30 w-1/9"/>
+<img src="/logo_salesforce.png" class="absolute top-100 left-3/7 w-1/7"/>
+<img src="/wat.png" class="absolute top-100 left-8/10 w-1/7"/>
 
 </v-clicks>
-
-<div v-click>
-
-- WAT - GOD LEVEL
-<img src="/wat.png" style="height: 230px"/>
-
-</div>
 
 <!--
 ## JS / React
@@ -254,7 +248,9 @@ layout: image-right
 image: /salesforce.jpeg
 ---
 
-# Salesforce from a frontend team perspective
+# Backend a frontend team perspective
+
+Limits
 
 <v-clicks>
 
@@ -349,7 +345,8 @@ If we cannot run requests in parallel, we have to run them consecutively. One af
 ---
 
 # Success criteria
-Customer always comes first
+
+<img class="mx-auto w-3/5" src="/customer_first.png"/>
 
 * from customer point of view nothing changes
 * mutations are executed in sequence
@@ -384,19 +381,49 @@ The key here is **Link chain**.
 
 ---
 
+# Why not break the chain?
+
+<div grid="~ cols-2" class="justify-items-center pt-15">
+
+<img class="w-1/2" src="/forward.webp"/>
+
+<img class="w-1/2" src="/back.webp"/>
+
+Forward down the chain
+
+Back up the chain
+
+</div>
+
+---
+clicks: 3 
+---
+
 # What is a link?
 
-```ts
+```ts {3|4|4-5|7}
 import { ApolloLink } from '@apollo/client';
 
 const timeStartLink = new ApolloLink((operation, forward) => {
-  operation.setContext({ start: new Date() });
-  return forward(operation);
+                  forward(operation);
+  const result = 
+
+  return result;
 });
 ```
 
 The forward function's return type is an Observable provided by the **zen-observable** library. See the 
 zen-observable documentation for details.
+
+
+<img class="absolute w-3/4" src="/link_1.png"/>
+<img v-click="1" class="absolute w-3/4" src="/link_2.png"/>
+<img v-click="2" class="absolute w-3/4" src="/link_3.png"/>
+<img v-click="3" class="absolute w-3/4" src="/link_4.png"/>
+
+<!--
+Hijack control over return - use Observable
+ -->
 
 ---
 
@@ -475,7 +502,10 @@ layout: section
 
 # Empty link
 
-```ts {all|1-3|4-|8|5,10}
+```ts {all|1-7|7-|11|8,13}
+// operation - contains your variables, mutation name
+// forward - pushes your request down the chain link
+
 export const queuedLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
@@ -812,10 +842,44 @@ layout: center
 
 <v-click>
 
-<h1 class="text-right">Thank you!</h1>
+<h1 class="text-right">It won't be that pretty!</h1>
 
 </v-click>
 
+---
+
+# Wrap-up
+Final thoughts
+
+<v-clicks>
+
+- if you can a choice, don't do it
+- if you need to do it, think of edge-cases
+- if you want to learn about Apollo, links, caching and optimistic responses:
+  - read documentation
+  - open source code
+- if you ever need to find a creative solution like that, embrase the opportunity and try 
+enjoying the process
+
+</v-clicks>
+
+---
+
+# How to reach me?
+
+Find me after the talks in a hall
+
+<div grid="~ cols-2" class="justify-items-center">
+
+Linkedin link
+
+Telegram link
+
+Linkedin 
+
+Telegram
+
+</div>
 ---
 
 # What is Slidev?
