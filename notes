@@ -1,0 +1,28 @@
+
+- increase font size for bullet points, may be use images to fill the slide
+
+- Required knowledge - rework slide to talk more about technoligies that we'll talk about rather than
+a requirement that you need to know to understand it.
+
+- on the slide with DO NOT BREAK THE CHAIN add a visual explanation WHY you actually cannot do it.
+
+- on a slide What is a link - explain all arrows with highlighting
+
+- consider adding Demo App (may be screenshots)
+
+- on the first slide of creating a link add comments for `forward/operation` and next slide for `observer`
+
+- Slide with "How did we end up here?" - rewrite title + content to tell more about an app and it's history. May be 
+convert bullet points into a story.
+
+- add "How to contact me" slide
+
+- add a Wrap-up slide after the rabbit's butt
+
+- explain a bit more Observability library
+
+Just notes:
+- DO NOT TRASH SALESFORCE
+- DO more interactions with an audience: how many people work with X, how many people tried Y?
+- Add a hand raised counter app
+- during the code explanation part SLOW DOWN

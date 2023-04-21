@@ -7,7 +7,7 @@ background: https://source.unsplash.com/collection/94734566/1920x1080
 # apply any windi css classes to the current slide
 class: 'text-center'
 # https://sli.dev/custom/highlighters.html
-highlighter: shiki
+# highlighter: shiki
 # show line numbers in code blocks
 lineNumbers: false
 # some information about the slides, markdown enabled
@@ -22,18 +22,12 @@ drawings:
 # page transition
 transition: slide-left
 # use UnoCSS
-css: unocss
+# css: unocss
 ---
 
-# Welcome to Slidev
+# Consecutive GraphQL mutations 
 
-Presentation slides for developers
-
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
+with offline support
 
 <div class="abs-br m-6 flex gap-2">
   <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
@@ -50,36 +44,59 @@ The last comment block of each slide will be treated as slide notes. It will be 
 -->
 
 ---
-transition: fade-out
+
+# Plan
+- About me
+- Prerequisites (what tech do you need to know?)
+- Organisation stack & requests example
+- Problem definition, solution direction and acceptance criteria
+- GraphQL & Apollo
+- **New Consecutive link**
+- Summary
+- **Offline cherry on top**
+- Further considerations
+
 ---
-# How it all started?
 
-Why did I do that?
-
----
-
-# Required knowledge
-
-Complexity
+# Who am I?
 
 <div v-click>
 
-- Javascript / React - easy/medium
-- React Native - easy/medium
-- GraphQL - easy/medium -> hard
+- In software development for 10+ years
+- Worked for companies with number of employees
+  - 0 -> 20 successful start-ups
+  - 100 000+ employees (3-5 letter companies)
+- JS/TS ecosystems 
+- 1st language was AS (ActionScript 3.0) for Flex Framework
+
+</div>
+
+<div class="grid grid-cols-2">
+
+<div v-click>
+
+My hobbies are:
+- snowboarding (20+ years)
+- kitesurfing (< 1 year)
 
 </div>
 
 <div v-click>
 
-- WAT - GOD LEVEL
-<img src="/wat.png" style="height: 230px"/>
+At work:
+- building stable complex systems
+- coaching developers
 
 </div>
 
+</div>
+---
+layout: center
 ---
 
-# Why on Earth did we do it?
+# How did we and up here?
+
+---
 
 What do you need to know
 
@@ -90,6 +107,16 @@ What do you need to know
 - Staff turn-over
 
 </v-clicks>
+
+<br/>
+
+<div v-click class="flex flex-col items-center">
+
+# The answer is
+
+<img src="/dont-know-idk.gif"/>
+
+</div>
 
 <!-- 
 ## Legacy code
@@ -106,17 +133,85 @@ People come and go, they find new jobs, move to another countries take sabbatica
 -->
 
 ---
+layout: section
+---
 
-# Our stack
+# Prerequisites 
+
+---
+
+# Required knowledge
+
+Complexity
+
+<v-clicks>
+
+- Javascript / React - easy/medium
+- React Native - easy/medium
+- GraphQL - easy/medium 
+  - -> hard
+
+</v-clicks>
+
+<div v-click>
+
+- WAT - GOD LEVEL
+<img src="/wat.png" style="height: 230px"/>
+
+</div>
+
+<!--
+## JS / React
+Nothing extra complex. It's a JS and React, so think of 1 week of online courses online and you can call yourself a Senior Developer. Basic language only.
+
+## React-Native.
+Same here - we'll use only a basic application to shows some UI elements and we'll add a GraphQL library
+
+## GraphQL
+Once added, we'll use basic feauters like queries/mutations, nothing that you won't be able to do after a
+day of going through basic tutorials.
+
+### It will become HARD 
+Once we start implementing links and going into the source code of GraphQL Apollo to see how the 
+internals are implemented
+
+## WAT 
+You won't survive this talk with an appeciation or acceptance of WAT existence. I'm sorry
+-->
+
+---
+layout: section
+---
+
+# Stack & requests example
+
+---
+
+# Company's stack
 
 <img src="/overview-app.png"/>
+
+<!--
+
+## React-Native
+iOS / Android app
+
+## GraphQL
+Client - Apollo Graphql
+Server - AWS Appsync
+
+## Data source
+Salesforce Rest API
+
+Tell about 1 to 1 connection between lambdas and Rest API
+-->
 
 ---
 
 # Typical request example 
 
-<div grid="~ cols-5 gap-6">
-  <div col-span-2>
+<div class="grid grid-cols-5 gap-6">
+  <div class="col-span-2">
   
   ```ts
     updateOrderChecklist({
@@ -134,15 +229,32 @@ People come and go, they find new jobs, move to another countries take sabbatica
   
   </div>
 
-  <img col-span-3 src="/overview-app.png"/>
+  <div class="col-span-3">
+    <img src="/overview-app.png"/>
+  </div>
+  
 </div>
 
+<!-- 
+
+## Typical request 
+A technician fills out a questionaire. Fast clicks through the list.
+
+TODO: add app screenshot
+
+-->
+
 ---
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
+layout: section
 ---
 
-# Salesforce limits imposed on the frontend team
+# Problem definition, solution and acceptance criteria
+---
+layout: image-right
+image: /salesforce.jpeg
+---
+
+# Salesforce from a frontend team perspective
 
 <v-clicks>
 
@@ -152,9 +264,23 @@ image: https://source.unsplash.com/collection/94734566/1920x1080
 
 </v-clicks>
 
+<!-- 
+
+## Long-runnig request
+Explain requests in parallel
+
+## Number of API requests
+Typical limits hourly/daily/monthly
+
+# DB locks
+SF is a massive DB. Depending on the specific usage and automations you may have kind of locks. 
+Example - Order and changes for it.
+
+-->
+
 ---
 
-# Example
+# Problem 
 
 <style>
   .img {
@@ -178,71 +304,23 @@ image: https://source.unsplash.com/collection/94734566/1920x1080
 # Solution direction
 
 <div>Updates must be done in sequence</div>
+<br/>
 
 <v-click>
 
-<div>From Salesforce this will reduce all 3 limits:
-
-- number of API calls
-</div>
+From Salesforce point of view this will will help us dealing with multiple limitations:
+- reduced Salesforce load
+- fewer DB locks
 
 </v-click>
-
-<v-clicks>
-
-- reduced SF load -> fewer long lasting requests
-- Fewer DB locks (since we’ll have fewer requests in parallel).
-
-</v-clicks>
-
-
 
 
 <!-- 
 If we cannot run requests in parallel, we have to run them consecutively. One after another, yes.
 
--  since 1 user will be adding only 1 request at a time
-- 
-
+- fewer long lasting requests
+- since we’ll have fewer requests in parallel
 -->
-
----
-
-# Success criteria
-## Customer always comes first
-
-* From customer point of view nothing changes, they should still be able work with app without noticing ANY delays
-* Actual changes (mutations) are executed in sequence
-
----
-
-# GraphQL links
-
-<img src="/graphql-link.png"/>
-
-GraphQL offers a way to customize Apollo Client's data flow with something called Links:
-* logging link
-* error handler link
-* execution time link
-
-The key here is **Link chain** TODO (Add Dineris saying "I want to break the chain" crossed).
-
----
-
-# What is a link?
-
-```ts
-import { ApolloLink } from '@apollo/client';
-
-const timeStartLink = new ApolloLink((operation, forward) => {
-  operation.setContext({ start: new Date() });
-  return forward(operation);
-});
-```
-
-The forward function's return type is an Observable provided by the **zen-observable** library. See the 
-zen-observable documentation for details.
-
 
 ---
 
@@ -270,11 +348,63 @@ zen-observable documentation for details.
 
 ---
 
+# Success criteria
+Customer always comes first
+
+* from customer point of view nothing changes
+* mutations are executed in sequence
+
+<!-- 
+- they should still be able work with app without noticing ANY delays, be able to click fast etc.
+- this is known only by devs
+-->
+
+---
+layout: section
+---
+
+# GraphQL & Apollo
+
+---
+
+# GraphQL links
+
+<img src="/graphql-link.png"/>
+
+GraphQL offers a way to customize Apollo Client's data flow with something called Links:
+* logging link
+* error handler link
+* execution time link
+
+The key here is **Link chain**.
+
+<v-click>
+  <img class="absolute top-30 left-60 w-1/2" src="/chain-breaker.png"/>
+</v-click>
+
+---
+
+# What is a link?
+
+```ts
+import { ApolloLink } from '@apollo/client';
+
+const timeStartLink = new ApolloLink((operation, forward) => {
+  operation.setContext({ start: new Date() });
+  return forward(operation);
+});
+```
+
+The forward function's return type is an Observable provided by the **zen-observable** library. See the 
+zen-observable documentation for details.
+
+---
+
 # GraphQL mutation
 
 <div grid="~ cols-2 gap-5">
 
-```ts
+```ts {all|3-4|7-9|all|0}
 // Mutation definition
 const UPDATE_COMMENT = gql`
   mutation UpdateComment($commentId: ID!, 
@@ -289,7 +419,7 @@ const UPDATE_COMMENT = gql`
 `;
 ```
 
-```ts
+```ts {0|3|7-8|9-15}
 // Component definition
 function CommentPageWithData() {
   const [mutate] = useMutation(UPDATE_COMMENT);
@@ -336,9 +466,7 @@ updateOrderChecklist({
 But requests are still executed in parallel. Let’s fix it. -->
 
 ---
-layout: center
-theme: bricks
-image: rabbit.png
+layout: section
 ---
 
 # Let's create a link!
@@ -347,10 +475,18 @@ image: rabbit.png
 
 # Empty link
 
-```ts
+```ts {all|1-3|4-|8|5,10}
 export const queuedLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
+
+const linkChain = ApolloLink.from([
+  authLink,
+  errorLink,
+  queuedLink,
+  responseLogger,
+  httpLink
+]);
 ```
 
 <img class="pt-4" src="/link-regular.png"/>
@@ -359,17 +495,20 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 
 # Create a queue
 
-```ts {1,4|all}
+```ts {1,4-7|all}
 const queue = [];
 
 export const queuedLink = new ApolloLink((operation, forward) => {
-  queue.push(operation);
+  queue.push({
+    forward,
+    operation,
+  });
 
   return forward(operation);
 });
 ```
 
-<img class="pt-4" src="/link-new-queue.png"/>
+<img class="" src="/link-new-queue.png"/>
 
 ---
 
@@ -377,7 +516,7 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 
 <div v-click-hide>
 
-```ts {1,4-20|all}
+```ts {4-20|9|all}
 const queue = [];
 
 export const queuedLink = new ApolloLink((operation, forward) => {
@@ -396,11 +535,11 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 
 </div>
 
-<img v-after class="pt-4 absolute top-40 w-4\/5" src="/link-return-observer.png"/>
+<img v-after class="pt-4 absolute top-40 w-4/5" src="/link-return-observer.png"/>
 
 ---
 
-# Execute queue
+# Execute queue #1
 
 ```ts {3-5,16|all}
 const queue = [];
@@ -427,7 +566,7 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 
 ---
 
-# Execute queue
+# Execute queue #2
 
 ```ts {3,6-17|all}
 const queue = [];
@@ -455,15 +594,7 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 
 ---
 
-<style>
-  #code-block pre * {
-    font-size: 0.9em !important;
-  }
-</style>
-
-# Execute queue
-
-<div id="code-block">
+# Execute queue #3
 
 ```ts {3-18|3|5|6|7-10|11-13|14-17|all}
 const executeQueue = async () => {
@@ -487,12 +618,73 @@ const executeQueue = async () => {
 }
 
 export const queuedLink = new ApolloLink((operation, forward) => {
-  ...
+```
+
+---
+
+# All together
+
+
+<style>
+.all-code pre {
+  font-size: 0.4em !important;
+  line-height: 10px !important;
+}
+</style>
+
+
+<div class="all-code">
+
+```ts
+const queue = [];
+
+let queueRuning = false;
+
+const executeQueue = async () => {
+  if (queue.length === 0 || queueRuning) {
+    return;
+  }
+
+  queueRuning = true;
+
+  const { forward, operation, observer } = queue.shift();
+
+  forward(operation)
+    .subscribe(
+      async (result) => {
+        observer.next(result);
+        observer.complete();
+      },
+      (error) => {
+        observer.error(error);
+      },
+      () => {
+        queueRuning = false;
+        executeQueue();
+      },
+    );
+}
+
+export const queuedLink = new ApolloLink((operation, forward) => {
+  return new Observable((observer) => {
+    queue.push({
+      operation,
+      forward,
+      observer,
+    });
+    executeQueue();
+    return () => {};
+  });
+});
 ```
 
 </div>
 
+---
+layout: section
+---
 
+# Summary of what was done
 
 ---
 
@@ -500,14 +692,35 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 
 ### What did we achieve?
 
+<v-clicks>
+
 1. it works
 2. we have something in our lives to be shamed about
 
+</v-clicks>
+
 ### Important considerations
+
+<v-clicks>
+
 - All mutations that go to consecutive queue must have an optimistic response
-  - To make sure a user doesn’t see any difference
 - Optimistic response should be correct
-  - Otherwise a user will see UI changing after the actual response is received
+- IDs
+
+</v-clicks>
+
+<!-- 
+
+- To make sure a user doesn’t see any difference
+- Otherwise a user will see UI changing after the actual response is received
+- IDs handling makes this implementation A LOT harder
+
+-->
+---
+layout: section
+---
+
+# Offline cherry on top
 
 ---
 
@@ -540,17 +753,47 @@ const executeQueue = async () => {
 # Further thoughts on IDs
 ### A rabbit starts it's journey
 
-- IDs. If you create a new object and then edit it before you received a response from server, 
-you don’t know what Object.ID you want to update/delete.
-  - Can be fixed by having a dictionary with key-value pairs where the key is temp ID and 
-  value is an actual ID after a response is receive. 
-    - For every mutation you’ll need to go through all variables in the payload and replace 
-    temp value with actual one if found
-      - Automated iteration in every field of the payload (may be intensive) or custom logic for 
-      some of the mutations (needs to be maintained separately) - your choice.
+<p v-click>
+* IDs
+</p>
 
-<!-- ---
-layout: center    -->
+<p v-click>
+&nbsp;&nbsp; * Dictionary?
+
+  ``` ts
+  const ids = {
+    "TEMP_LOCAL_ID_1": "KA71LS07SF03865",
+    ...
+  }
+  ```
+</p>
+
+<p v-click>
+&nbsp;&nbsp;&nbsp;&nbsp; * Multiple updates (update/delete product, order, settings etc.)
+</p>
+
+<p v-click>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Automatic vs manual patches
+</p>
+
+<!-- 
+
+- If you create a new object and then edit it before you received a response from server, 
+you don’t know what Object.ID you want to update/delete.
+
+- Can be fixed by having a dictionary with key-value pairs where the key is temp ID and 
+  value is an actual ID after a response is receive. 
+
+- For every mutation you’ll need to go through all variables in the payload and replace 
+  temp value with actual one if found - all of them needs to be checked.
+
+- Automated iteration in every field of the payload (may be intensive) or custom logic for 
+  some of the mutations (needs to be maintained separately) - your choice.
+
+-->
+
+---
+layout: center
 ---
 
 <style>
@@ -567,6 +810,11 @@ layout: center    -->
   <span grid="~ col-span-1"></span>
 </div>
 
+<v-click>
+
+<h1 class="text-right">Thank you!</h1>
+
+</v-click>
 
 ---
 
