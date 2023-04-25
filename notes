@@ -1,5 +1,5 @@
 
-- increase font size for bullet points, may be use images to fill the slide
++ increase font size for bullet points, may be use images to fill the slide
 
 + Required knowledge - rework slide to talk more about technoligies that we'll talk about rather than
 a requirement that you need to know to understand it.
@@ -12,14 +12,14 @@ a requirement that you need to know to understand it.
 
 + on the first slide of creating a link add comments for `forward/operation` and next slide for `observer`
 
-- Slide with "How did we end up here?" - rewrite title + content to tell more about an app and it's history. May be 
++ Slide with "How did we end up here?" - rewrite title + content to tell more about an app and it's history. May be 
 convert bullet points into a story.
 
-? add "How to contact me" slide
++ add "How to contact me" slide
 
 + add a Wrap-up slide after the rabbit's butt
 
-- explain a bit more Observability library
++ explain a bit more Observability library
 
 Just notes:
 - DO NOT TRASH SALESFORCE

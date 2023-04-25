@@ -47,14 +47,15 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 # Plan
 - About me
+- App history
 - Technologies of the talk
-- Organisation stack & requests example
+- App stack & requests example
 - Problem definition, solution direction and acceptance criteria
 - GraphQL & Apollo
 - **New Consecutive link**
 - Summary
 - **Offline cherry on top**
-- Further considerations
+- Wrap-up
 
 ---
 
@@ -90,29 +91,37 @@ At work:
 </div>
 
 </div>
+
 ---
 layout: center
 ---
 
-# How did we and up here?
+# App history
 
 ---
 
-What do you need to know
+# Road to the present state
 
 <v-clicks>
 
-- Legacy code
-- Mature product
-- Staff turn-over
+- mobile app ~5 years in development, 4 years in production
+- backend ~6 years in development
+- in the Fronend-end team only 1 team member left from the initial implementation team
+- the plan for the product is
+  - support legacy features
+  - rebuild old stuff when possible
+  - add new features
 
 </v-clicks>
 
-<br/>
+---
+layout: center
+---
 
-<div v-click class="flex flex-col items-center">
+<div class="flex flex-col items-center">
 
-# The answer is
+# So, if you ask me a question
+## I may answer
 
 <img src="/dont-know-idk.gif"/>
 
@@ -141,6 +150,7 @@ layout: section
 ---
 
 # Technologies
+Warm up your hands
 
 <v-clicks>
 
@@ -248,9 +258,9 @@ layout: image-right
 image: /salesforce.jpeg
 ---
 
-# Backend a frontend team perspective
+# Backend from a frontend team perspective
 
-Limits
+Limits that we need to know about and respect
 
 <v-clicks>
 
@@ -304,8 +314,8 @@ Example - Order and changes for it.
 
 <v-click>
 
-From Salesforce point of view this will will help us dealing with multiple limitations:
-- reduced Salesforce load
+From Salesforce point of view this will will help us:
+- having fewer long lasting requests
 - fewer DB locks
 
 </v-click>
@@ -533,7 +543,6 @@ export const queuedLink = new ApolloLink((operation, forward) => {
     forward,
     operation,
   });
-
   return forward(operation);
 });
 ```
@@ -629,7 +638,7 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 ```ts {3-18|3|5|6|7-10|11-13|14-17|all}
 const executeQueue = async () => {
   ...
-  const { forward, operation, observer } = queue.shift();
+  const { operation, forward, observer } = queue.shift();
 
   forward(operation)
     .subscribe(
@@ -853,7 +862,7 @@ Final thoughts
 
 <v-clicks>
 
-- if you can a choice, don't do it
+- if you have a choice, don't do it
 - if you need to do it, think of edge-cases
 - if you want to learn about Apollo, links, caching and optimistic responses:
   - read documentation
@@ -871,13 +880,13 @@ Find me after the talks in a hall
 
 <div grid="~ cols-2" class="justify-items-center">
 
-Linkedin link
+<img class="w-70" src="/qr_linkedin.png"/>
 
-Telegram link
+<img class="w-55" src="/qr_telegram.png"/>
 
-Linkedin 
+https://www.linkedin.com/in/victor-sheyanov/ 
 
-Telegram
+https://t.me/vsheyanov
 
 </div>
 ---
