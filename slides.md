@@ -78,6 +78,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 My hobbies are:
 - snowboarding (20+ years)
+<img class="w-30" src="/snowboard.jpg"/>
 - kitesurfing (< 1 year)
 
 </div>
@@ -85,8 +86,9 @@ My hobbies are:
 <div v-click>
 
 At work:
-- building stable complex systems
-- coaching developers
+- building complex systems
+- mentoring junior developers
+<img src="/ducks.gif"/>
 
 </div>
 
@@ -697,14 +699,8 @@ export const queuedLink = new ApolloLink((operation, forward) => {
 </div>
 
 ---
-layout: section
----
 
 # Summary of what was done
-
----
-
-# Summary
 
 ### What did we achieve?
 
