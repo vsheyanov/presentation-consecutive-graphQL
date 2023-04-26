@@ -108,7 +108,7 @@ layout: center
 
 - mobile app ~5 years in development, 4 years in production
 - backend ~6 years in development
-- in the Fronend-end team only 1 team member left from the initial implementation team
+- in the Frontend-end team only 1 team member left from the initial implementation team
 - the plan for the product is
   - support legacy features
   - rebuild old stuff when possible
@@ -390,12 +390,12 @@ clicks: 3
 
 # What is a link?
 
-```ts {3|4|4-5|7}
+```ts {3|5|5|7}
 import { ApolloLink } from '@apollo/client';
 
 const timeStartLink = new ApolloLink((operation, forward) => {
-                  forward(operation);
-  const result = 
+                  
+  const result = forward(operation);
 
   return result;
 });
