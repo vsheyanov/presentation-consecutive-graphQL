@@ -746,7 +746,7 @@ let queueRuning = false;
 let isOffline = false;
 
 NetInfo.addEventListener(state => {
-  isOffline = state.isInternetReachable !== true
+  isOffline = !state.isInternetReachable
   
   if (!isOffline) {
     executeQueue();
