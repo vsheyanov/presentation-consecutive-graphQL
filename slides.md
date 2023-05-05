@@ -847,6 +847,24 @@ enjoying the process
 
 ---
 
+# Credits
+
+Images:
+- https://www.reddit.com/r/DaenerysWinsTheThrone/comments/103jlnc/breaker_of_chains/
+- https://www.apollographql.com/docs/react/api/link/introduction/
+- https://www.vitakraft.nl/vl/tips/sos-vitakraft-eerste-hulp-bij-selectieve-knabbelaars/
+
+Tech:
+- https://www.apollographql.com/
+- https://reactnative.dev/
+- https://www.typescriptlang.org/
+- https://aws.amazon.com/appsync/
+- https://salesforce.com/
+- https://miro.com/
+- https://sli.dev/
+
+---
+
 # How to reach me?
 
 Find me after the talks in a hall
@@ -855,7 +873,7 @@ Find me after the talks in a hall
 
 <img class="w-70" src="/qr_linkedin.png"/>
 
-<img class="w-55" src="/qr_telegram.png"/>
+<img class="w-55" src="/qr_telegram.jpeg"/>
 
 https://www.linkedin.com/in/victor-sheyanov/ 
 
